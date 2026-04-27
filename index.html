@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hombre Memoria - Archivo de Memorias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="monogram" aria-hidden="true">HM</div>
+            <h1>Hombre Memoria</h1>
+            <p class="subtitle">Archivo de memorias por Carlos Villar</p>
+        </header>
+
+        <div class="controls">
+            <button id="randomBtn" class="btn btn-primary">Artículo Aleatorio</button>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar en artículos..." class="search-input">
+                <button id="searchBtn" class="btn btn-secondary">Buscar</button>
+            </div>
+        </div>
+
+        <div id="articleContainer" class="article-container">
+            <div class="loading">Cargando artículos...</div>
+        </div>
+
+        <div class="bottom-section">
+            <div id="tagCloud" class="tag-cloud">
+                <h2>Nubes de Etiquetas</h2>
+                <div id="tagsContainer"></div>
+            </div>
+            <div class="articles-link-section">
+                <h2>Lista de Artículos</h2>
+                <a href="articulos.html" class="articles-link-btn">Ver todos los artículos →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-brand">
+            <div class="footer-mark">Hombre Memoria</div>
+            <p class="footer-tagline">Archivo de memorias de tradición oral del Campo de Calatrava</p>
+        </div>
+        <div class="footer-cols">
+            <div class="footer-col">
+                <h4>El archivo</h4>
+                <ul>
+                    <li><a href="index.html">Página principal</a></li>
+                    <li><a href="articulos.html">Lista de artículos</a></li>
+                    <li><a href="informacion.html">Sobre el proyecto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="aviso-legal.html">Aviso legal</a></li>
+                    <li><a href="privacidad.html">Política de privacidad</a></li>
+                    <li><a href="cookies.html">Política de cookies</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="mailto:hombre-memoria-carlosbvillar@mail.com">Escribir al autor</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Carlos Villar · Todos los derechos reservados sobre el contenido editorial.</p>
+            <p class="footer-fineprint">Sitio sin fines comerciales. Las grabaciones originales son propiedad de su autor.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
