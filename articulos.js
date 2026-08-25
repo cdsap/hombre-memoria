@@ -2,30 +2,50 @@ let articles = [];
 
 // Load and parse CSV file
 async function loadCSV() {
+    const list = document.getElementById('articlesList');
+    const showError = (message) => {
+        if (list) list.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    };
+
+    if (typeof Papa === 'undefined') {
+        showError('No se pudo cargar el lector CSV. Recarga la página.');
+        return;
+    }
+
+    if (window.location.protocol === 'file:') {
+        showError('Abre el sitio con un servidor local (python3 -m http.server) o en https://cdsap.github.io/hombre-memoria/ — el navegador bloquea el archivo CSV en file://.');
+        return;
+    }
+
     try {
-        const response = await fetch('db.csv');
+        const response = await fetch(new URL('db.csv', window.location.href).href);
+        if (!response.ok) {
+            showError(`No se pudo cargar db.csv (${response.status}).`);
+            return;
+        }
         const csvText = await response.text();
-        
+
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                articles = results.data.filter(article => 
-                    article.Titulo && article.memoria && article.memoria.trim() !== ''
+                articles = results.data.filter(article =>
+                    article.Titulo && article.memoria && String(article.memoria).trim() !== ''
                 );
-                console.log(`Loaded ${articles.length} articles`);
+                if (articles.length === 0) {
+                    showError('El archivo CSV no contiene artículos legibles.');
+                    return;
+                }
                 displayArticles();
             },
             error: function(error) {
                 console.error('Error parsing CSV:', error);
-                document.getElementById('articlesList').innerHTML = 
-                    '<div class="error">Error al cargar los artículos. Por favor, asegúrate de que db.csv esté en el mismo directorio.</div>';
+                showError('Error al interpretar los artículos del CSV.');
             }
         });
     } catch (error) {
         console.error('Error loading CSV:', error);
-        document.getElementById('articlesList').innerHTML = 
-            '<div class="error">Error al cargar el archivo CSV. Por favor, verifica que estés usando un servidor local (no file://).</div>';
+        showError('Error al cargar el archivo CSV. Prueba recargando la página.');
     }
 }
 

@@ -52,9 +52,42 @@ function extractQuote(memoria, maxLen = 180) {
     return cut.trim() + '…';
 }
 
-async function loadCSV() {
+function showLoadError(message) {
+    const quoteEl = document.getElementById('quoteText');
+    const attrEl = document.getElementById('quoteAttribution');
+    if (quoteEl) quoteEl.textContent = message;
+    if (attrEl) attrEl.textContent = '— Hombre Memoria';
+    const container = document.getElementById('articleContainer');
+    if (container) {
+        container.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    }
+}
+
+function csvUrl() {
     try {
-        const response = await fetch('db.csv');
+        return new URL('db.csv', window.location.href).href;
+    } catch (e) {
+        return 'db.csv';
+    }
+}
+
+async function loadCSV() {
+    if (typeof Papa === 'undefined') {
+        showLoadError('No se pudo cargar el lector CSV. Recarga la página.');
+        return;
+    }
+
+    if (window.location.protocol === 'file:') {
+        showLoadError('Abre el sitio con un servidor local (python3 -m http.server) o en https://cdsap.github.io/hombre-memoria/ — el navegador bloquea el archivo CSV en file://.');
+        return;
+    }
+
+    try {
+        const response = await fetch(csvUrl());
+        if (!response.ok) {
+            showLoadError(`No se pudo cargar db.csv (${response.status}).`);
+            return;
+        }
         const csvText = await response.text();
 
         Papa.parse(csvText, {
@@ -62,26 +95,31 @@ async function loadCSV() {
             skipEmptyLines: true,
             complete: function(results) {
                 articles = results.data.filter(article =>
-                    article.Titulo && article.memoria && article.memoria.trim() !== ''
+                    article.Titulo && article.memoria && String(article.memoria).trim() !== ''
                 );
+                if (articles.length === 0) {
+                    showLoadError('El archivo CSV no contiene artículos legibles.');
+                    return;
+                }
                 displayRandomArticle();
                 generateTagCloud();
             },
             error: function(error) {
                 console.error('Error parsing CSV:', error);
-                document.getElementById('articleContainer').innerHTML =
-                    '<div class="error">Error al cargar los artículos. Por favor, asegúrate de que db.csv esté en el mismo directorio.</div>';
+                showLoadError('Error al interpretar los artículos del CSV.');
             }
         });
     } catch (error) {
         console.error('Error loading CSV:', error);
-        document.getElementById('articleContainer').innerHTML =
-            '<div class="error">Error al cargar el archivo CSV. Por favor, verifica que estés usando un servidor local (no file://).</div>';
+        showLoadError('Error al cargar el archivo CSV. Prueba recargando la página.');
     }
 }
 
 function displayRandomArticle() {
-    if (articles.length === 0) return;
+    if (articles.length === 0) {
+        showLoadError('Todavía no hay artículos cargados.');
+        return;
+    }
     const randomIndex = Math.floor(Math.random() * articles.length);
     currentArticle = articles[randomIndex];
     renderArticle(currentArticle);
