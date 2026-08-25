@@ -1,7 +1,6 @@
 let articles = [];
 let currentArticle = null;
 
-// List of images in the pictures folder
 const images = [
     '21 Nov Batanes 008.jpg',
     '9 nov 056.jpg',
@@ -36,119 +35,136 @@ const images = [
     'Villamanrique 76 001.jpg'
 ];
 
-// Get a random image path
 function getRandomImage() {
     const randomIndex = Math.floor(Math.random() * images.length);
     return `pictures/${images[randomIndex]}`;
 }
 
-// Load and parse CSV file
+function extractQuote(memoria, maxLen = 180) {
+    if (!memoria) return '';
+    let text = memoria.trim();
+    text = text.replace(/^[“"«….\s]+/, '');
+    text = text.replace(/\s+/g, ' ');
+    if (text.length <= maxLen) return text;
+    const slice = text.slice(0, maxLen);
+    const lastSpace = slice.lastIndexOf(' ');
+    const cut = lastSpace > 80 ? slice.slice(0, lastSpace) : slice;
+    return cut.trim() + '…';
+}
+
 async function loadCSV() {
     try {
         const response = await fetch('db.csv');
         const csvText = await response.text();
-        
+
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                articles = results.data.filter(article => 
+                articles = results.data.filter(article =>
                     article.Titulo && article.memoria && article.memoria.trim() !== ''
                 );
-                console.log(`Loaded ${articles.length} articles`);
                 displayRandomArticle();
                 generateTagCloud();
             },
             error: function(error) {
                 console.error('Error parsing CSV:', error);
-                document.getElementById('articleContainer').innerHTML = 
+                document.getElementById('articleContainer').innerHTML =
                     '<div class="error">Error al cargar los artículos. Por favor, asegúrate de que db.csv esté en el mismo directorio.</div>';
             }
         });
     } catch (error) {
         console.error('Error loading CSV:', error);
-        document.getElementById('articleContainer').innerHTML = 
+        document.getElementById('articleContainer').innerHTML =
             '<div class="error">Error al cargar el archivo CSV. Por favor, verifica que estés usando un servidor local (no file://).</div>';
     }
 }
 
-// Display a random article
 function displayRandomArticle() {
     if (articles.length === 0) return;
-    
     const randomIndex = Math.floor(Math.random() * articles.length);
     currentArticle = articles[randomIndex];
     renderArticle(currentArticle);
 }
 
-// Render article to the page
+function updateQuoteHero(article) {
+    const quoteEl = document.getElementById('quoteText');
+    const attrEl = document.getElementById('quoteAttribution');
+    if (!quoteEl || !attrEl) return;
+
+    const quote = extractQuote(article.memoria || '');
+    quoteEl.textContent = quote ? `«${quote}»` : '«…»';
+
+    const parts = [];
+    if (article['Hombre Memoria']) parts.push(article['Hombre Memoria']);
+    if (article.Lugar) parts.push(article.Lugar);
+    if (article.Fecha) parts.push(article.Fecha);
+    attrEl.textContent = parts.length ? `— ${parts.join(' · ')}` : '';
+}
+
 function renderArticle(article) {
     const container = document.getElementById('articleContainer');
     const randomImagePath = getRandomImage();
-    
+    updateQuoteHero(article);
+
     const articleHTML = `
-        <div class="article">
-            <div class="article-header">
-                <div class="article-header-content">
-                    <h2 class="article-title">${escapeHtml(article.Titulo || 'Sin título')}</h2>
-                    <div class="article-meta">
-                        ${article['Hombre Memoria'] ? `<div class="meta-item"><strong>Persona:</strong> ${escapeHtml(article['Hombre Memoria'])}</div>` : ''}
-                        ${article.Lugar ? `<div class="meta-item"><strong>Lugar:</strong> ${escapeHtml(article.Lugar)}</div>` : ''}
-                        ${article.Fecha ? `<div class="meta-item"><strong>Fecha:</strong> ${escapeHtml(article.Fecha)}</div>` : ''}
-                        ${article.notes ? `<div class="meta-item"><strong>Notas:</strong> ${escapeHtml(article.notes)}</div>` : ''}
-                    </div>
+        <article class="article">
+            <div class="article-main">
+                <h2 class="article-title">${escapeHtml(article.Titulo || 'Sin título')}</h2>
+                <div class="article-meta">
+                    ${article['Hombre Memoria'] ? `<div class="meta-item"><strong>Persona</strong> ${escapeHtml(article['Hombre Memoria'])}</div>` : ''}
+                    ${article.Lugar ? `<div class="meta-item"><strong>Lugar</strong> ${escapeHtml(article.Lugar)}</div>` : ''}
+                    ${article.Fecha ? `<div class="meta-item"><strong>Fecha</strong> ${escapeHtml(article.Fecha)}</div>` : ''}
+                    ${article.notes ? `<div class="meta-item"><strong>Notas</strong> ${escapeHtml(article.notes)}</div>` : ''}
                 </div>
-                <div class="article-image-container">
-                    <img src="${randomImagePath}" alt="Imagen" class="article-image" onerror="this.style.display='none'">
-                </div>
+                <div class="article-content">${escapeHtml(article.memoria || '')}</div>
             </div>
-            <div class="article-content">${escapeHtml(article.memoria || '')}</div>
-        </div>
+            <aside class="article-aside">
+                <figure class="article-image-container">
+                    <img src="${randomImagePath}" alt="Fotograma del archivo documental" class="article-image" onerror="this.closest('figure').style.display='none'">
+                    <figcaption class="article-image-caption">Campo de Calatrava</figcaption>
+                </figure>
+            </aside>
+        </article>
     `;
-    
+
     container.innerHTML = articleHTML;
 }
 
-// Generate tag cloud based on places (Lugar)
 function generateTagCloud() {
     const tagsContainer = document.getElementById('tagsContainer');
     const tagCounts = {};
-    
-    // Count occurrences of each place
+
     articles.forEach(article => {
         if (article.Lugar && article.Lugar.trim() !== '') {
             const lugar = article.Lugar.trim();
             tagCounts[lugar] = (tagCounts[lugar] || 0) + 1;
         }
     });
-    
-    // Sort tags by count
+
     const sortedTags = Object.entries(tagCounts)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 50); // Show top 50 tags
-    
+        .slice(0, 50);
+
     if (sortedTags.length === 0) {
-        tagsContainer.innerHTML = '<p>No hay etiquetas disponibles.</p>';
+        tagsContainer.innerHTML = '<p>No hay lugares disponibles.</p>';
         return;
     }
-    
-    // Find min and max counts for sizing
+
     const counts = sortedTags.map(tag => tag[1]);
     const minCount = Math.min(...counts);
     const maxCount = Math.max(...counts);
-    
+
     tagsContainer.innerHTML = sortedTags.map(([tag, count]) => {
-        // Calculate size based on count (0.75em to 1.4em)
-        const size = minCount === maxCount ? 1 : 
+        const size = minCount === maxCount ? 1 :
             0.75 + (count - minCount) / (maxCount - minCount) * 0.65;
-        const sizeClass = size < 0.85 ? 'tag-small' : 
-                         size < 1.0 ? 'tag-medium' : 
+        const sizeClass = size < 0.85 ? 'tag-small' :
+                         size < 1.0 ? 'tag-medium' :
                          size < 1.2 ? 'tag-large' : 'tag-xlarge';
-        
-        return `<span class="tag ${sizeClass}" data-tag="${escapeHtml(tag)}" title="${count} artículo${count > 1 ? 's' : ''}">${escapeHtml(tag)}</span>`;
+
+        return `<button type="button" class="tag ${sizeClass}" data-tag="${escapeHtml(tag)}" title="${count} artículo${count > 1 ? 's' : ''}">${escapeHtml(tag)}</button>`;
     }).join('');
-    
-    // Add click handlers to tags for filtering
+
     tagsContainer.querySelectorAll('.tag').forEach(tagEl => {
         tagEl.addEventListener('click', () => {
             const tagName = tagEl.getAttribute('data-tag');
@@ -157,83 +173,95 @@ function generateTagCloud() {
     });
 }
 
-// Search articles by tag (place)
 function searchByTag(tagName) {
-    const filteredArticles = articles.filter(article => 
+    const filteredArticles = articles.filter(article =>
         article.Lugar && article.Lugar.trim() === tagName
     );
-    
+
     if (filteredArticles.length > 0) {
         const randomFromFiltered = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
         renderArticle(randomFromFiltered);
-        // Scroll to article
         document.getElementById('articleContainer').scrollIntoView({ behavior: 'smooth' });
     }
 }
 
-// Search functionality
 function searchArticles(query) {
     if (!query || query.trim() === '') {
         displayRandomArticle();
         return;
     }
-    
+
     const searchTerm = query.toLowerCase().trim();
     const results = articles.filter(article => {
         const title = (article.Titulo || '').toLowerCase();
         const content = (article.memoria || '').toLowerCase();
         const lugar = (article.Lugar || '').toLowerCase();
         const persona = (article['Hombre Memoria'] || '').toLowerCase();
-        
-        return title.includes(searchTerm) || 
-               content.includes(searchTerm) || 
-               lugar.includes(searchTerm) || 
+
+        return title.includes(searchTerm) ||
+               content.includes(searchTerm) ||
+               lugar.includes(searchTerm) ||
                persona.includes(searchTerm);
     });
-    
+
     displaySearchResults(results, searchTerm);
 }
 
-// Display search results
 function displaySearchResults(results, searchTerm) {
     const container = document.getElementById('articleContainer');
-    
+    const quoteEl = document.getElementById('quoteText');
+    const attrEl = document.getElementById('quoteAttribution');
+
+    if (quoteEl) quoteEl.textContent = `Resultados para «${searchTerm}»`;
+    if (attrEl) attrEl.textContent = `${results.length} coincidencia${results.length === 1 ? '' : 's'}`;
+
     if (results.length === 0) {
-        container.innerHTML = '<div class="no-results">No se encontraron artículos que coincidan con "' + escapeHtml(searchTerm) + '"</div>';
+        container.innerHTML = '<div class="no-results">No se encontraron artículos que coincidan con «' + escapeHtml(searchTerm) + '»</div>';
         return;
     }
-    
+
     const resultsHTML = `
         <div class="search-results">
             <h3>${results.length} artículo${results.length > 1 ? 's' : ''} encontrado${results.length > 1 ? 's' : ''}</h3>
             ${results.map(article => {
-                const preview = article.memoria ? 
-                    escapeHtml(article.memoria.substring(0, 200)) + (article.memoria.length > 200 ? '...' : '') : 
+                const preview = article.memoria ?
+                    escapeHtml(article.memoria.substring(0, 200)) + (article.memoria.length > 200 ? '…' : '') :
                     'Sin contenido';
-                
+                const idx = articles.indexOf(article);
+
                 return `
-                    <div class="search-result-item" onclick="selectSearchResult(${articles.indexOf(article)})">
+                    <div class="search-result-item" role="button" tabindex="0" data-index="${idx}">
                         <div class="search-result-title">${escapeHtml(article.Titulo || 'Sin título')}</div>
                         <div class="search-result-preview">${preview}</div>
-                        ${article.Lugar ? `<div class="search-result-preview" style="margin-top: 5px; font-weight: 600;">Lugar: ${escapeHtml(article.Lugar)}</div>` : ''}
+                        ${article.Lugar ? `<div class="search-result-preview" style="margin-top: 0.35rem;">${escapeHtml(article.Lugar)}</div>` : ''}
                     </div>
                 `;
             }).join('')}
         </div>
     `;
-    
+
     container.innerHTML = resultsHTML;
+
+    container.querySelectorAll('.search-result-item').forEach(item => {
+        const open = () => selectSearchResult(Number(item.getAttribute('data-index')));
+        item.addEventListener('click', open);
+        item.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                open();
+            }
+        });
+    });
 }
 
-// Select a search result
 function selectSearchResult(index) {
     if (articles[index]) {
         renderArticle(articles[index]);
         document.getElementById('searchInput').value = '';
+        document.getElementById('articleContainer').scrollIntoView({ behavior: 'smooth' });
     }
 }
 
-// Escape HTML to prevent XSS
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -241,28 +269,24 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadCSV();
-    
+
     document.getElementById('randomBtn').addEventListener('click', () => {
         displayRandomArticle();
         document.getElementById('searchInput').value = '';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
+
     document.getElementById('searchBtn').addEventListener('click', () => {
-        const query = document.getElementById('searchInput').value;
-        searchArticles(query);
+        searchArticles(document.getElementById('searchInput').value);
     });
-    
+
     document.getElementById('searchInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            const query = document.getElementById('searchInput').value;
-            searchArticles(query);
+            searchArticles(document.getElementById('searchInput').value);
         }
     });
 });
 
-// Make selectSearchResult available globally
 window.selectSearchResult = selectSearchResult;
-

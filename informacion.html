@@ -3,218 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informacion - Hombre Memoria</title>
+    <title>Información — Hombre Memoria</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=3">
-    <style>
-        .informacion-page {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-
-        .informacion-page h1 {
-            font-family: var(--serif-display);
-            text-align: center;
-            margin-bottom: 8px;
-            color: var(--ink);
-            font-size: clamp(2.25rem, 5vw, 3.25rem);
-            font-weight: 700;
-            letter-spacing: -0.005em;
-            line-height: 1.1;
-        }
-
-        .informacion-eyebrow {
-            text-align: center;
-            font-family: var(--sans-meta);
-            font-size: 0.75rem;
-            color: var(--ink-soft);
-            text-transform: uppercase;
-            letter-spacing: 0.22em;
-            margin-bottom: 48px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--rule);
-            position: relative;
-        }
-
-        .informacion-eyebrow::after {
-            content: "❦";
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--paper);
-            color: var(--accent);
-            padding: 0 16px;
-            font-size: 1.125rem;
-        }
-
-        .informacion-content {
-            background: transparent;
-            border-radius: 0;
-            padding: 0;
-            box-shadow: none;
-            border: none;
-        }
-
-        .informacion-image-container {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .informacion-image {
-            max-width: 100%;
-            height: auto;
-            max-height: 460px;
-            border-radius: 2px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--rule);
-            padding: 8px;
-            background: var(--paper);
-            transition: transform 0.4s ease;
-        }
-
-        .informacion-image:hover {
-            transform: translateY(-2px);
-        }
-
-        .informacion-text {
-            font-family: var(--serif-body);
-            font-size: 1.125rem;
-            line-height: 1.85;
-            color: var(--ink);
-            text-align: justify;
-            hyphens: auto;
-            -webkit-hyphens: auto;
-        }
-
-        .informacion-text p {
-            margin-bottom: 24px;
-        }
-
-        .informacion-text p:first-of-type::first-letter {
-            font-family: var(--serif-display);
-            font-size: 3.4em;
-            line-height: 0.85;
-            float: left;
-            margin: 0.08em 0.08em 0 0;
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        .back-link-container {
-            text-align: center;
-            margin-top: 56px;
-            padding-top: 32px;
-            border-top: 1px solid var(--rule);
-        }
-
-        .back-link {
-            display: inline-block;
-            padding: 12px 24px;
-            background: transparent;
-            color: var(--ink);
-            text-decoration: none;
-            border: 1px solid var(--ink);
-            border-radius: 2px;
-            font-family: var(--sans-meta);
-            font-weight: 500;
-            font-size: 0.8125rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            transition: all 0.2s ease;
-        }
-
-        .back-link:hover {
-            background: var(--ink);
-            color: var(--paper);
-        }
-
-        .email-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            border-bottom: 1px solid var(--rule);
-            padding-bottom: 1px;
-            transition: all 0.2s ease;
-        }
-
-        .email-link:hover {
-            color: var(--accent-dark);
-            border-bottom-color: var(--accent);
-        }
-
-        @media (max-width: 768px) {
-            .informacion-page {
-                padding: 0 8px;
-            }
-
-            .informacion-text {
-                font-size: 1.0625rem;
-                line-height: 1.75;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
-    <div class="container">
-        <div class="informacion-page">
-            <h1>Informacion</h1>
-            <p class="informacion-eyebrow">Acerca del archivo</p>
-            <div class="informacion-content">
-                <div class="informacion-image-container">
-                    <img src="pictures/carlos.jpg" alt="Carlos Villar" class="informacion-image" onerror="this.style.display='none'">
-                </div>
-                <div class="informacion-text">
-                    <p>Esta página web es una recopilación de distintos extractos que Carlos Villar obtuvo de las grabaciones de sus entrevistas sobre los diferentes aspectos de su amado Campo de Calatrava.</p>
+    <div class="page">
+        <header class="nav-edge">
+            <a class="nav-edge__wordmark" href="index.html">Hombre Memoria</a>
+            <a class="nav-edge__cta" href="articulos.html">Artículos →</a>
+        </header>
 
-                    <p>Trabajaba en torno a la idea del hombre memoria, en una época en la que tardamos milisegundos en transmitir información y vivimos altamente conectados con el mundo, aunque hasta hace poco no era así. El concepto de cultura es amplio y, durante siglos, ha sido el encargado de preservar las comunicaciones orales y las transmisiones de conocimiento de generación en generación.</p>
+        <article class="prose-page">
+            <h1>Información</h1>
+            <p class="prose-kicker">Acerca del archivo</p>
 
-                    <p>Las imágenes han sido extraídas de dichas grabaciones. Si usted o alguna organización está interesada en acceder a las grabaciones completas o a más material, no dude en ponerse en contacto a través del correo electrónico: <a href="mailto:hombre-memoria-carlosbvillar@mail.com" class="email-link">hombre-memoria-carlosbvillar@mail.com</a>.</p>
-                </div>
-                <div class="back-link-container">
-                    <a href="index.html" class="back-link">← Volver al archivo</a>
-                </div>
+            <figure class="prose-figure">
+                <img src="pictures/carlos.jpg" alt="Carlos Villar" onerror="this.closest('figure').style.display='none'">
+                <figcaption>Carlos Villar</figcaption>
+            </figure>
+
+            <div class="prose">
+                <p>Esta página web es una recopilación de distintos extractos que Carlos Villar obtuvo de las grabaciones de sus entrevistas sobre los diferentes aspectos de su amado Campo de Calatrava.</p>
+
+                <p>Trabajaba en torno a la idea del hombre memoria, en una época en la que tardamos milisegundos en transmitir información y vivimos altamente conectados con el mundo, aunque hasta hace poco no era así. El concepto de cultura es amplio y, durante siglos, ha sido el encargado de preservar las comunicaciones orales y las transmisiones de conocimiento de generación en generación.</p>
+
+                <p>Las imágenes han sido extraídas de dichas grabaciones. Si usted o alguna organización está interesada en acceder a las grabaciones completas o a más material, no dude en ponerse en contacto a través del correo electrónico: <a href="mailto:hombre-memoria-carlosbvillar@mail.com">hombre-memoria-carlosbvillar@mail.com</a>.</p>
             </div>
-        </div>
+
+            <a href="index.html" class="back-link">← Volver al archivo</a>
+        </article>
+
+        <footer class="foot-letter">
+            <p class="foot-letter__close">
+                En memoria,<br>
+                <span class="foot-letter__sign">— Carlos Villar</span>
+            </p>
+            <p class="foot-letter__ps">
+                P.D. — Archivo de tradición oral del Campo de Calatrava.
+                Cartas a <a href="mailto:hombre-memoria-carlosbvillar@mail.com">hombre-memoria-carlosbvillar@mail.com</a>.
+            </p>
+            <nav class="foot-letter__links" aria-label="Enlaces del sitio">
+                <a href="aviso-legal.html">Aviso legal</a>
+                <a href="privacidad.html">Privacidad</a>
+                <a href="cookies.html">Cookies</a>
+            </nav>
+        </footer>
     </div>
-
-    <footer class="site-footer">
-        <div class="footer-brand">
-            <div class="footer-mark">Hombre Memoria</div>
-            <p class="footer-tagline">Archivo de memorias de tradición oral del Campo de Calatrava</p>
-        </div>
-        <div class="footer-cols">
-            <div class="footer-col">
-                <h4>El archivo</h4>
-                <ul>
-                    <li><a href="index.html">Página principal</a></li>
-                    <li><a href="articulos.html">Lista de artículos</a></li>
-                    <li><a href="informacion.html">Sobre el proyecto</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="aviso-legal.html">Aviso legal</a></li>
-                    <li><a href="privacidad.html">Política de privacidad</a></li>
-                    <li><a href="cookies.html">Política de cookies</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contacto</h4>
-                <ul>
-                    <li><a href="mailto:hombre-memoria-carlosbvillar@mail.com">Escribir al autor</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2026 Carlos Villar · Todos los derechos reservados sobre el contenido editorial.</p>
-            <p class="footer-fineprint">Sitio sin fines comerciales. Las grabaciones originales son propiedad de su autor.</p>
-        </div>
-    </footer>
 </body>
 </html>
-

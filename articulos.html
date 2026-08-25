@@ -3,207 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Artículos - Hombre Memoria</title>
+    <title>Lista de Artículos — Hombre Memoria</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=3">
-    <style>
-        .articles-page {
-            max-width: 760px;
-            margin: 0 auto;
-        }
-
-        .articles-page-header {
-            text-align: center;
-            margin-bottom: 56px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--rule);
-        }
-
-        .articles-page-header h1 {
-            font-family: var(--serif-display);
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 12px;
-            letter-spacing: -0.005em;
-        }
-
-        .articles-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .article-list-item {
-            background: transparent;
-            border-radius: 0;
-            padding: 32px 0;
-            box-shadow: none;
-            border: none;
-            border-bottom: 1px solid var(--rule);
-            transition: padding-left 0.25s ease;
-        }
-
-        .article-list-item:hover {
-            box-shadow: none;
-            transform: none;
-            padding-left: 12px;
-        }
-
-        .article-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 16px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-
-        .article-list-title {
-            font-family: var(--serif-display);
-            font-size: clamp(1.375rem, 3vw, 1.75rem);
-            color: var(--ink);
-            font-weight: 600;
-            margin: 0;
-            flex: 1;
-            line-height: 1.25;
-            letter-spacing: -0.005em;
-        }
-
-        .article-list-lugar {
-            background: transparent;
-            color: var(--accent);
-            padding: 0;
-            border-radius: 0;
-            font-family: var(--sans-meta);
-            font-size: 0.6875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            white-space: nowrap;
-            border-bottom: 1px solid var(--rule);
-            padding-bottom: 2px;
-        }
-
-        .article-list-meta {
-            color: var(--ink-soft);
-            font-size: 0.875rem;
-            margin-bottom: 4px;
-            font-family: var(--serif-body);
-        }
-
-        .article-list-meta strong {
-            color: var(--accent);
-            font-family: var(--sans-meta);
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.6875rem;
-            letter-spacing: 0.16em;
-            margin-right: 8px;
-        }
-
-        .article-list-preview {
-            color: var(--ink-soft);
-            font-size: 1rem;
-            line-height: 1.7;
-            margin: 16px 0;
-            font-family: var(--serif-body);
-            font-style: italic;
-        }
-
-        .article-list-link {
-            display: inline-block;
-            color: var(--accent);
-            text-decoration: none;
-            font-family: var(--sans-meta);
-            font-weight: 500;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            margin-top: 8px;
-            transition: color 0.2s ease;
-            border-bottom: 1px solid var(--rule);
-            padding-bottom: 2px;
-        }
-
-        .article-list-link:hover {
-            color: var(--accent-dark);
-            border-bottom-color: var(--accent);
-        }
-
-        .back-link-container {
-            text-align: center;
-            margin-top: 56px;
-            padding-top: 32px;
-            border-top: 1px solid var(--rule);
-        }
-
-        @media (max-width: 768px) {
-            .article-list-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .article-list-lugar {
-                align-self: flex-start;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
-    <div class="container">
-        <div class="articles-page">
-            <div class="articles-page-header">
-                <h1>Lista de Artículos</h1>
-                <p class="subtitle">Todos los artículos del archivo</p>
-            </div>
-            <div id="articlesList" class="articles-list">
-                <div class="loading">Cargando artículos...</div>
-            </div>
-            <div class="back-link-container">
-                <a href="index.html" class="btn btn-primary">← Volver a la página principal</a>
-            </div>
-        </div>
-    </div>
+    <div class="page">
+        <header class="nav-edge">
+            <a class="nav-edge__wordmark" href="index.html">Hombre Memoria</a>
+            <a class="nav-edge__cta" href="index.html">Archivo →</a>
+        </header>
 
-    <footer class="site-footer">
-        <div class="footer-brand">
-            <div class="footer-mark">Hombre Memoria</div>
-            <p class="footer-tagline">Archivo de memorias de tradición oral del Campo de Calatrava</p>
-        </div>
-        <div class="footer-cols">
-            <div class="footer-col">
-                <h4>El archivo</h4>
-                <ul>
-                    <li><a href="index.html">Página principal</a></li>
-                    <li><a href="articulos.html">Lista de artículos</a></li>
-                    <li><a href="informacion.html">Sobre el proyecto</a></li>
-                </ul>
+        <div class="index-page">
+            <p class="index-lede">
+                <strong>Índice alfabético.</strong>
+                Todos los extractos del archivo, ordenados por título.
+            </p>
+
+            <div id="articlesList" class="articles-list">
+                <div class="loading">Cargando artículos…</div>
             </div>
-            <div class="footer-col">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="aviso-legal.html">Aviso legal</a></li>
-                    <li><a href="privacidad.html">Política de privacidad</a></li>
-                    <li><a href="cookies.html">Política de cookies</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contacto</h4>
-                <ul>
-                    <li><a href="mailto:hombre-memoria-carlosbvillar@mail.com">Escribir al autor</a></li>
-                </ul>
-            </div>
+
+            <a href="index.html" class="back-link">← Volver al archivo</a>
         </div>
-        <div class="footer-bottom">
-            <p>© 2026 Carlos Villar · Todos los derechos reservados sobre el contenido editorial.</p>
-            <p class="footer-fineprint">Sitio sin fines comerciales. Las grabaciones originales son propiedad de su autor.</p>
-        </div>
-    </footer>
+
+        <footer class="foot-letter">
+            <p class="foot-letter__close">
+                En memoria,<br>
+                <span class="foot-letter__sign">— Carlos Villar</span>
+            </p>
+            <p class="foot-letter__ps">
+                P.D. — Archivo de tradición oral del Campo de Calatrava.
+                Cartas a <a href="mailto:hombre-memoria-carlosbvillar@mail.com">hombre-memoria-carlosbvillar@mail.com</a>.
+            </p>
+            <nav class="foot-letter__links" aria-label="Enlaces del sitio">
+                <a href="informacion.html">Sobre el proyecto</a>
+                <a href="aviso-legal.html">Aviso legal</a>
+                <a href="privacidad.html">Privacidad</a>
+                <a href="cookies.html">Cookies</a>
+            </nav>
+        </footer>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="articulos.js"></script>
 </body>
 </html>
-

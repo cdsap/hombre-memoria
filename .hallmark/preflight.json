@@ -1,0 +1,9 @@
+{
+  "scanned": "2026-08-25",
+  "framework": "vanilla-html",
+  "fonts": ["Newsreader", "IBM Plex Sans"],
+  "motion": "none",
+  "designMd": "design.md",
+  "preserved": [],
+  "introduced": ["token system", "Quote-Led home", "N9 nav", "Ft6 footer", "slop-test gates"]
+}
